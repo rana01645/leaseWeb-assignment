@@ -24,14 +24,10 @@ class ServerController extends AbstractController
         $filePath = $this->getParameter('kernel.project_dir').'/var/data/servers_filters_assignment.xlsx';
 
         $serverRepo = (new ExcelServerRepository($filePath,new ExcelFilterMatcher(), new StorageParser()))
-                    ->setFilters($filters)
-                    ->setCurrentPage(1)
-                    ->setPerPage(400);
+                    ->setFilters($filters);
 
         $servers = $serverRepo->getServers();
         return new JsonResponse([
-            'currentPage' => $serverRepo->getCurrentPage(),
-            'nextPage' => $serverRepo->getNextPage(),
             'servers' => $servers,
         ]);
     }

@@ -15,11 +15,12 @@ class ExcelServerRepository implements ServerRepositoryInterface
 
     private ExcelFilterMatcher $excelFilterMatcher;
     private array $filters = [];
-    private int $page = 1;
-    private int $perPage = 10;
 
-    public function __construct(string $excelFilePath,ExcelFilterMatcher $excelFilterMatcher, StorageParser $storageParser)
-    {
+    public function __construct(
+        string $excelFilePath,
+        ExcelFilterMatcher $excelFilterMatcher,
+        StorageParser $storageParser
+    ) {
         $this->worksheet = IOFactory::load($excelFilePath)->getActiveSheet();
         $this->excelFilterMatcher = $excelFilterMatcher;
         $this->storageParser = $storageParser;
@@ -32,24 +33,9 @@ class ExcelServerRepository implements ServerRepositoryInterface
         return $this;
     }
 
-    public function setCurrentPage(int $page): ServerRepositoryInterface
-    {
-        $this->page = $page;
-        return $this;
-    }
-
-    public function setPerPage(int $perPage): ServerRepositoryInterface
-    {
-        $this->perPage = $perPage;
-        return $this;
-    }
-
     public function getServers(): array
     {
-        $startRow = ($this->page - 1) * $this->perPage + 2;
-        $endRow = $startRow + $this->perPage - 1;
-
-        $data = $this->worksheet->rangeToArray("A{$startRow}:E{$endRow}", null, true, true, true);
+        $data = $this->worksheet->rangeToArray('A2:E'.$this->worksheet->getHighestRow(), null, true, true, true);
         $servers = [];
         foreach ($data as $row) {
             $server = [
@@ -65,21 +51,6 @@ class ExcelServerRepository implements ServerRepositoryInterface
             }
         }
         return $servers;
-    }
-
-    public function getCurrentPage(): int
-    {
-        return $this->page;
-    }
-
-    public function getNextPage(): int
-    {
-        return $this->page + 1;
-    }
-
-    public function getPreviousPage(): int
-    {
-        return $this->page - 1;
     }
 
 
