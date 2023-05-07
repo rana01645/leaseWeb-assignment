@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Enum\ExcelServerFields;
 use App\Service\ExcelFilterMatcher;
 use App\Utils\RamParser;
 use App\Utils\StorageParser;
@@ -27,7 +28,11 @@ class ExcelServerRepository implements ServerRepositoryInterface
         StorageParser $storageParser,
         RamParser $ramParser
     ) {
-        $this->worksheet = IOFactory::load($excelFilePath)->getActiveSheet();
+        try {
+            $this->worksheet = IOFactory::load($excelFilePath)->getActiveSheet();
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Error loading Excel file: '.$e->getMessage());
+        }
         $this->excelFilterMatcher = $excelFilterMatcher;
         $this->storageParser = $storageParser;
         $this->ramParser = $ramParser;
@@ -36,26 +41,40 @@ class ExcelServerRepository implements ServerRepositoryInterface
 
     public function setFilters(array $filters): ServerRepositoryInterface
     {
+        $this->checkValidFilters($filters);
         $this->filters = $filters;
         return $this;
     }
 
+    private function checkValidFilters(array $filters): void
+    {
+        foreach ($filters as $field => $value) {
+            if (!in_array($field, ExcelServerFields::getSupportedFilters(), true)) {
+                throw new \InvalidArgumentException('Invalid filter '.$field.' provided, supported filters are: '.implode(', ', ExcelServerFields::getSupportedFilters()));
+            }
+        }
+    }
+
     public function getServers(): array
     {
-        $data = $this->worksheet->rangeToArray('A2:E'.$this->worksheet->getHighestRow(), null, true, true, true);
+         try {
+             $data = $this->worksheet->rangeToArray('A2:E'.$this->worksheet->getHighestRow(), null, true, true, true);
+         } catch (\Exception $e) {
+             throw new \RuntimeException('Error parsing Excel file: '.$e->getMessage());
+         }
         $servers = [];
         foreach ($data as $row) {
             $server = [
-                'model' => $row['A'],
-                'ram' => $row['B'],
-                'hdd' => $row['C'],
-                'location' => $row['D'],
-                'price' => $row['E'],
+                ExcelServerFields::MODEL => $row['A'],
+                ExcelServerFields::RAM => $row['B'],
+                ExcelServerFields::HDD => $row['C'],
+                ExcelServerFields::LOCATION => $row['D'],
+                ExcelServerFields::PRICE => $row['E'],
 
-                'hdd_type' => $this->storageParser->parseType($row['C']),
-                'hdd_capacity' => $this->storageParser->parseCapacity($row['C']),
-                'ram_type' => $this->ramParser->parseType($row['B']),
-                'ram_capacity' => $this->ramParser->parseCapacity($row['B']),
+                ExcelServerFields::HDD_TYPE => $this->storageParser->parseType($row['C']),
+                ExcelServerFields::HDD_CAPACITY => $this->storageParser->parseCapacity($row['C']),
+                ExcelServerFields::RAM_TYPE => $this->ramParser->parseType($row['B']),
+                ExcelServerFields::RAM_CAPACITY => $this->ramParser->parseCapacity($row['B']),
             ];
             if ($this->excelFilterMatcher->matchesFilters($server, $this->filters)) {
                 $servers[] = $server;
@@ -87,6 +106,12 @@ class ExcelServerRepository implements ServerRepositoryInterface
 
     public function orderBy(string $field, string $direction = 'asc'): ServerRepositoryInterface
     {
+        if (!in_array($field, ExcelServerFields::getSupportedOrderByFields())) {
+            throw new \InvalidArgumentException('Invalid orderBy field: '.$field);
+        }
+        if (!in_array($direction, ['asc', 'desc'])) {
+            throw new \InvalidArgumentException('Invalid orderBy direction: ' . $direction);
+        }
         $this->orderByField = $field;
         $this->orderByDirection = $direction;
         return $this;

@@ -9,7 +9,7 @@ class RamParser
         if (preg_match('/(\d+)GB/', $ramValue, $matches)) {
             return (int) $matches[1];
         }
-        return null;
+         throw new \InvalidArgumentException('Invalid RAM value provided, currently only value in GB is supported');
     }
 
     public function parseType(string $ramValue): ?string
@@ -17,6 +17,6 @@ class RamParser
         if (preg_match('/\d+GB(\w+)/', $ramValue, $matches)) {
             return $matches[1];
         }
-        return null;
+        throw new \InvalidArgumentException('Invalid RAM Type value provided, currently only value in GB is supported');
     }
 }

@@ -11,7 +11,7 @@ class StorageParser
         $pattern = '/^((\d+x)?\d+(TB|GB))/';
         preg_match($pattern, $hddValue, $matches);
         if (empty($matches)) {
-            return '0 GB';
+            throw new \InvalidArgumentException('Invalid HDD value provided, currently Value in only GB and TB are supported');
         }
 
         // If there are multiple disks, calculate the total storage in GB
@@ -40,6 +40,9 @@ class StorageParser
     public function parseType(mixed $hddValue): string
     {
         preg_match('/SATA\d+|SAS|SSD/', $hddValue, $matches);
+        if (empty($matches)) {
+            throw new \InvalidArgumentException('Invalid HDD value provided, currently only SATA, SAS and SSD are supported');
+        }
         return empty($matches) ? '' : $matches[0];
     }
 
