@@ -19,7 +19,7 @@ class ExcelFilterMatcher
         return true;
     }
 
-    private function matchesFilter(string $value, $filter): bool
+    public function matchesFilter(string $value, $filter): bool
     {
         if (is_array($filter)) {
             foreach ($filter as $item) {
