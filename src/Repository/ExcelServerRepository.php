@@ -16,11 +16,8 @@ class ExcelServerRepository implements ServerRepositoryInterface
     private ExcelFilterMatcher $excelFilterMatcher;
     private array $filters = [];
 
-    public function __construct(
-        string $excelFilePath,
-        ExcelFilterMatcher $excelFilterMatcher,
-        StorageParser $storageParser
-    ) {
+    public function __construct(string $excelFilePath,ExcelFilterMatcher $excelFilterMatcher, StorageParser $storageParser)
+    {
         $this->worksheet = IOFactory::load($excelFilePath)->getActiveSheet();
         $this->excelFilterMatcher = $excelFilterMatcher;
         $this->storageParser = $storageParser;
