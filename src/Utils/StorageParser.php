@@ -5,7 +5,7 @@ namespace App\Utils;
 class StorageParser
 {
 
-    public function getStorageFromHdd(string $hddValue): string
+    public function parseCapacity(string $hddValue): string
     {
         // Get the value till GB or TB
         $pattern = '/^((\d+x)?\d+(TB|GB))/';
@@ -19,10 +19,10 @@ class StorageParser
         if (strpos($value, 'x') !== false) {
             [$count, $size] = explode('x', $value);
             $sizeInGB = $this->getSizeInGB($size);
-            return $sizeInGB * $count.' GB';
+            return $sizeInGB * $count;
         }
         //here value is in like 120GB or 2TB
-        return $this->getSizeInGB($value).' GB';
+        return $this->getSizeInGB($value);
     }
 
     private function getSizeInGB($size)
@@ -35,6 +35,12 @@ class StorageParser
         }
 
         return (int) str_replace('GB', '', $size);
+    }
+
+    public function parseType(mixed $hddValue): string
+    {
+        preg_match('/SATA\d+|SAS|SSD/', $hddValue, $matches);
+        return empty($matches) ? '' : $matches[0];
     }
 
 }
