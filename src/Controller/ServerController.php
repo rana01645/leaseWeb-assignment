@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Enum\ExcelServerFields;
 use App\Repository\ExcelServerRepository;
+use App\Repository\ServerRepositoryInterface;
 use App\Service\ExcelFilterMatcher;
 use App\Utils\RamParser;
 use App\Utils\StorageParser;
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ServerController extends AbstractController
 {
     #[Route('/server', name: 'app_server')]
-    public function index(): JsonResponse
+    public function index(ServerRepositoryInterface $repository): JsonResponse
     {
 
         // Define the filters you want to apply
@@ -25,10 +26,7 @@ class ServerController extends AbstractController
             ExcelServerFields::HDD_CAPACITY => '0-1024',
         ];
 
-        $filePath = $this->getParameter('kernel.project_dir').'/var/data/servers_filters_assignment.xlsx';
-
-        $serverRepo = (new ExcelServerRepository($filePath, new ExcelFilterMatcher(), new StorageParser(),
-            new RamParser()))
+        $serverRepo = $repository
             ->orderBy('location', 'desc')
             ->setFilters($filters);
 
