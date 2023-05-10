@@ -103,6 +103,43 @@ class ExcelServerRepository implements ServerRepositoryInterface
         return $servers;
     }
 
+    public function getLocations(): array
+    {
+        try {
+            $data = $this->worksheet->rangeToArray('D2:D'.$this->worksheet->getHighestRow(), null, true, true, true);
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Error parsing Excel file: '.$e->getMessage());
+        }
+        $locations = [];
+        foreach ($data as $row) {
+            $locations[] = $row['D'];
+        }
+        return array_values(array_unique($locations));
+    }
+
+    public function getRamOptions(): array
+    {
+        try {
+            $data = $this->worksheet->rangeToArray('B2:B'.$this->worksheet->getHighestRow(), null, true, true, true);
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Error parsing Excel file: '.$e->getMessage());
+        }
+        $ramFilters = [];
+        foreach ($data as $row) {
+            $ramFilters[] = $this->ramParser->parseCapacity($row['B']);
+        }
+        //sort the data
+        sort($ramFilters);
+
+        //add GB to the end of each value
+        foreach ($ramFilters as $key => $value) {
+            $ramFilters[$key] = $value.'GB';
+        }
+
+        return array_values(array_unique($ramFilters));
+    }
+
+
 
     public function orderBy(string $field, string $direction = 'asc'): ServerRepositoryInterface
     {

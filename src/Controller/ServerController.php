@@ -3,11 +3,7 @@
 namespace App\Controller;
 
 use App\Enum\ExcelServerFields;
-use App\Repository\ExcelServerRepository;
 use App\Repository\ServerRepositoryInterface;
-use App\Service\ExcelFilterMatcher;
-use App\Utils\RamParser;
-use App\Utils\StorageParser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,8 +27,14 @@ class ServerController extends AbstractController
             ->setFilters($filters);
 
         $servers = $serverRepo->getServers();
-        return new JsonResponse([
-            'servers' => $servers,
-        ]);
+        $locations = $serverRepo->getLocations();
+        $ramOptions = $serverRepo->getRamOptions();
+        return new JsonResponse(
+            [
+                'servers' => $servers,
+                'locations' => $locations,
+                'ramOptions' => $ramOptions,
+            ]
+        );
     }
 }

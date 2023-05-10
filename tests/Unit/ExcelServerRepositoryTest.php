@@ -26,14 +26,14 @@ class ExcelServerRepositoryTest extends TestCase
         );
     }
 
-    public function testGetServersReturnsArray() : void
+    public function testGetServersReturnsArray(): void
     {
         $servers = $this->repository->getServers();
 
         $this->assertIsArray($servers);
     }
 
-    public function testSetFiltersWithInvalidFiltersThrowsException() : void
+    public function testSetFiltersWithInvalidFiltersThrowsException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -44,21 +44,21 @@ class ExcelServerRepositoryTest extends TestCase
         $this->repository->setFilters($filters);
     }
 
-    public function testOrderByWithInvalidFieldThrowsException() : void
+    public function testOrderByWithInvalidFieldThrowsException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
         $this->repository->orderBy('invalid_field');
     }
 
-    public function testOrderByWithInvalidDirectionThrowsException() : void
+    public function testOrderByWithInvalidDirectionThrowsException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
         $this->repository->orderBy('price', 'invalid_direction');
     }
 
-    public function testGetServersWithValidFiltersReturnsCorrectData() : void
+    public function testGetServersWithValidFiltersReturnsCorrectData(): void
     {
         $filters = [
             ExcelServerFields::LOCATION => 'Amsterdam',
@@ -77,7 +77,7 @@ class ExcelServerRepositoryTest extends TestCase
         $this->assertEquals($expected, $servers);
     }
 
-    public function testGetServersWithValidOrderByReturnsCorrectData() : void
+    public function testGetServersWithValidOrderByReturnsCorrectData(): void
     {
         $filters = [
             ExcelServerFields::LOCATION => 'Amsterdam',
@@ -92,6 +92,33 @@ class ExcelServerRepositoryTest extends TestCase
             JSON_THROW_ON_ERROR);
 
         $this->assertEquals($expected, $servers);
+    }
+
+
+    public function testGetLocations(): void
+    {
+        $locations = $this->repository->getLocations();
+        $this->assertCount(7, $locations);
+        $this->assertContains('AmsterdamAMS-01', $locations);
+        $this->assertContains('Washington D.C.WDC-01', $locations);
+        $this->assertContains('San FranciscoSFO-12', $locations);
+        $this->assertContains('SingaporeSIN-11', $locations);
+        $this->assertContains('DallasDAL-10', $locations);
+        $this->assertContains('FrankfurtFRA-10', $locations);
+        $this->assertContains('Hong KongHKG-10', $locations);
+    }
+
+    public function testGetRamOptions(): void
+    {
+        $ramOptions = $this->repository->getRamOptions();
+        $this->assertCount(7, $ramOptions);
+        $this->assertContains('4GB', $ramOptions);
+        $this->assertContains('8GB', $ramOptions);
+        $this->assertContains('16GB', $ramOptions);
+        $this->assertContains('32GB', $ramOptions);
+        $this->assertContains('64GB', $ramOptions);
+        $this->assertContains('96GB', $ramOptions);
+        $this->assertContains('128GB', $ramOptions);
     }
 }
 
