@@ -1,0 +1,46 @@
+[
+  {
+    "model": "Dell R7202x Intel Xeon E5-2643",
+    "ram": "32GBDDR3",
+    "hdd": "2x120GBSSD",
+    "location": "AmsterdamAMS-01",
+    "price": "€221.99",
+    "hdd_type": "SSD",
+    "hdd_capacity": "240",
+    "ram_type": "DDR3",
+    "ram_capacity": 32
+  },
+  {
+    "model": "Dell R7202x Intel Xeon E5-2643",
+    "ram": "32GBDDR3",
+    "hdd": "2x120GBSSD",
+    "location": "AmsterdamAMS-01",
+    "price": "€246.99",
+    "hdd_type": "SSD",
+    "hdd_capacity": "240",
+    "ram_type": "DDR3",
+    "ram_capacity": 32
+  },
+  {
+    "model": "Dell R7202x Intel Xeon E5-2643",
+    "ram": "32GBDDR3",
+    "hdd": "2x120GBSSD",
+    "location": "AmsterdamAMS-01",
+    "price": "€226.99",
+    "hdd_type": "SSD",
+    "hdd_capacity": "240",
+    "ram_type": "DDR3",
+    "ram_capacity": 32
+  },
+  {
+    "model": "Dell R7202x Intel Xeon E5-2643",
+    "ram": "32GBDDR3",
+    "hdd": "2x120GBSSD",
+    "location": "AmsterdamAMS-01",
+    "price": "€360.99",
+    "hdd_type": "SSD",
+    "hdd_capacity": "240",
+    "ram_type": "DDR3",
+    "ram_capacity": 32
+  }
+]

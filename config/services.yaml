@@ -19,6 +19,13 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+    App\Repository\ServerRepositoryInterface:
+        class: App\Repository\ExcelServerRepository
+        arguments:
+            - '%kernel.project_dir%/var/data/servers_filters_assignment.xlsx'
+            - '@App\Service\ExcelFilterMatcher'
+            - '@App\Utils\StorageParser'
+            - '@App\Utils\RamParser'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
