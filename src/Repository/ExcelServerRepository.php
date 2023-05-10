@@ -151,4 +151,9 @@ class ExcelServerRepository implements ServerRepositoryInterface
         $this->orderByDirection = $direction;
         return $this;
     }
+
+    public function hasFilters()
+    {
+        return !empty($this->filters);
+    }
 }
