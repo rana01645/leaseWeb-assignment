@@ -131,11 +131,6 @@ class ExcelServerRepository implements ServerRepositoryInterface
         //sort the data
         sort($ramFilters);
 
-        //add GB to the end of each value
-        foreach ($ramFilters as $key => $value) {
-            $ramFilters[$key] = $value.'GB';
-        }
-
         return array_values(array_unique($ramFilters));
     }
 

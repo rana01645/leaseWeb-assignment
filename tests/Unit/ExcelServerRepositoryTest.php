@@ -112,13 +112,13 @@ class ExcelServerRepositoryTest extends TestCase
     {
         $ramOptions = $this->repository->getRamOptions();
         $this->assertCount(7, $ramOptions);
-        $this->assertContains('4GB', $ramOptions);
-        $this->assertContains('8GB', $ramOptions);
-        $this->assertContains('16GB', $ramOptions);
-        $this->assertContains('32GB', $ramOptions);
-        $this->assertContains('64GB', $ramOptions);
-        $this->assertContains('96GB', $ramOptions);
-        $this->assertContains('128GB', $ramOptions);
+        $this->assertContains(4, $ramOptions);
+        $this->assertContains(8, $ramOptions);
+        $this->assertContains(16, $ramOptions);
+        $this->assertContains(32, $ramOptions);
+        $this->assertContains(64, $ramOptions);
+        $this->assertContains(96, $ramOptions);
+        $this->assertContains(128, $ramOptions);
     }
 }
 
