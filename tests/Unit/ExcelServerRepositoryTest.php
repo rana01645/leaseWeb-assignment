@@ -99,13 +99,13 @@ class ExcelServerRepositoryTest extends TestCase
     {
         $locations = $this->repository->getLocations();
         $this->assertCount(7, $locations);
-        $this->assertContains('AmsterdamAMS-01', $locations);
-        $this->assertContains('Washington D.C.WDC-01', $locations);
-        $this->assertContains('San FranciscoSFO-12', $locations);
-        $this->assertContains('SingaporeSIN-11', $locations);
-        $this->assertContains('DallasDAL-10', $locations);
-        $this->assertContains('FrankfurtFRA-10', $locations);
-        $this->assertContains('Hong KongHKG-10', $locations);
+        $this->assertContains('AmsterdamAMS', $locations);
+        $this->assertContains('Washington D.C.WDC', $locations);
+        $this->assertContains('San FranciscoSFO', $locations);
+        $this->assertContains('SingaporeSIN', $locations);
+        $this->assertContains('DallasDAL', $locations);
+        $this->assertContains('FrankfurtFRA', $locations);
+        $this->assertContains('Hong KongHKG', $locations);
     }
 
     public function testGetRamOptions(): void

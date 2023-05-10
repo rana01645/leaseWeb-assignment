@@ -8,10 +8,6 @@ class ExcelFilterMatcher
     public function matchesFilters(array $server, array $filters): bool
     {
         foreach ($filters as $field => $value) {
-            // if ($field === 'storage') {
-            //     $server[$field] = $this->getStorageFromHdd($server['hdd']);
-            // }
-
             if (!$this->matchesFilter($server[$field], $value)) {
                 return false;
             }
@@ -39,7 +35,11 @@ class ExcelFilterMatcher
             $values = explode(',', $filter);
             return in_array($value, $values);
         }
-
+        //if value type int matches filter type int
+        if (is_numeric($value) && is_numeric($filter)) {
+            return $value === $filter;
+        }
+        //if value type string matches filter type string
         return $value === $filter || str_contains($value, $filter);
     }
 

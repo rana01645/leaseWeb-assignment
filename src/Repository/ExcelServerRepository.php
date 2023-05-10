@@ -112,10 +112,13 @@ class ExcelServerRepository implements ServerRepositoryInterface
         }
         $locations = [];
         foreach ($data as $row) {
-            $locations[] = $row['D'];
+            $location = $row['D'];
+            $city = substr($location, 0, strpos($location, '-'));
+            $locations[] = $city;
         }
         return array_values(array_unique($locations));
     }
+
 
     public function getRamOptions(): array
     {
