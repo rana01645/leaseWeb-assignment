@@ -55,7 +55,7 @@ class CachedExcelServerRepository implements ServerRepositoryInterface
 
     public function getCachedFilteredKey(): string
     {
-        return 'filtered_servers_'.md5(serialize($this->filters));
+        return 'filtered_servers_'.md5(serialize($this->getFilters()));
     }
 
     public function getCachedServers(): array
@@ -162,6 +162,11 @@ class CachedExcelServerRepository implements ServerRepositoryInterface
     public function hasFilters(): bool
     {
         return $this->repository->hasFilters();
+    }
+
+    public function getFilters(): array
+    {
+        return $this->repository->getFilters();
     }
 }
 

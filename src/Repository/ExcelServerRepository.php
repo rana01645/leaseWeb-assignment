@@ -156,4 +156,9 @@ class ExcelServerRepository implements ServerRepositoryInterface
     {
         return !empty($this->filters);
     }
+
+    public function getFilters(): array
+    {
+        return $this->filters;
+    }
 }
