@@ -1,0 +1,22 @@
+name: Deployment App On Web
+on:
+    push:
+        branches:
+            - main
+jobs:
+    master:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@master
+            -   name: Deploy on web server
+                uses: appleboy/ssh-action@master
+                with:
+                    host: "147.182.225.44"
+                    username: "rana"
+                    key: ${{ secrets.SSH_PRIVATE_KEY }}
+                    script: |
+                        cd /var/www/html/leaseweb
+                        git reset --hard
+                        git clean -df
+                        git fetch origin
+                        git checkout origin/main
