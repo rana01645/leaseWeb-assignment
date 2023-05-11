@@ -19,13 +19,26 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-    App\Repository\ServerRepositoryInterface:
+
+    App\Repository\ExcelServerRepository:
         class: App\Repository\ExcelServerRepository
         arguments:
             - '%kernel.project_dir%/var/data/servers_filters_assignment.xlsx'
             - '@App\Service\ExcelFilterMatcher'
             - '@App\Utils\StorageParser'
             - '@App\Utils\RamParser'
+            -
+    Symfony\Component\Cache\Adapter\FilesystemAdapter: ~
+
+    App\Repository\CachedExcelServerRepository:
+        class: App\Repository\CachedExcelServerRepository
+        arguments:
+            - '@App\Repository\ExcelServerRepository'
+            - '@Symfony\Component\Cache\Adapter\FilesystemAdapter'
+            - '%kernel.project_dir%/var/data/servers_filters_assignment.xlsx'
+
+    App\Repository\ServerRepositoryInterface:
+        alias: App\Repository\CachedExcelServerRepository
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -152,7 +152,7 @@ class ExcelServerRepository implements ServerRepositoryInterface
         return $this;
     }
 
-    public function hasFilters()
+    public function hasFilters() :bool
     {
         return !empty($this->filters);
     }

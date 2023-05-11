@@ -157,7 +157,7 @@ class CachedExcelServerRepository implements ServerRepositoryInterface
         return $this->repository->orderBy($field, $direction);
     }
 
-    public function hasFilters()
+    public function hasFilters(): bool
     {
         return $this->repository->hasFilters();
     }

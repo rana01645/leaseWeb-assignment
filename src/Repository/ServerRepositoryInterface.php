@@ -9,5 +9,5 @@ interface ServerRepositoryInterface
     public function getServers(): array;
     public function getLocations(): array;
     public function getRamOptions(): array;
-    public function hasFilters();
+    public function hasFilters(): bool;
 }
