@@ -1,22 +1,39 @@
 name: Deployment App On Web
+
 on:
-    push:
-        branches:
-            - main
+  push:
+    branches:
+      - main
+
 jobs:
-    master:
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@master
-            -   name: Deploy on web server
-                uses: appleboy/ssh-action@master
-                with:
-                    host: "147.182.225.44"
-                    username: "rana"
-                    key: ${{ secrets.SSH_PRIVATE_KEY }}
-                    script: |
-                        cd /var/www/html/leaseweb
-                        GIT_SSH_COMMAND='ssh -i ~/.ssh/leaseweb -o IdentitiesOnly=yes' git reset --hard
-                        GIT_SSH_COMMAND='ssh -i ~/.ssh/leaseweb -o IdentitiesOnly=yes' git clean -df
-                        GIT_SSH_COMMAND='ssh -i ~/.ssh/leaseweb -o IdentitiesOnly=yes' git fetch origin
-                        GIT_SSH_COMMAND='ssh -i ~/.ssh/leaseweb -o IdentitiesOnly=yes' git checkout origin/main
+  master:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Deploy on web server
+        uses: appleboy/ssh-action@master
+        with:
+          host: "147.182.225.44"
+          username: "rana"
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/html/leaseweb
+            GIT_SSH_COMMAND='ssh -i ~/.ssh/leaseweb -o IdentitiesOnly=yes' git reset --hard
+            GIT_SSH_COMMAND='ssh -i ~/.ssh/leaseweb -o IdentitiesOnly=yes' git clean -df
+            GIT_SSH_COMMAND='ssh -i ~/.ssh/leaseweb -o IdentitiesOnly=yes' git fetch origin
+            GIT_SSH_COMMAND='ssh -i ~/.ssh/leaseweb -o IdentitiesOnly=yes' git checkout origin/main
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Run tests
+        run: |
+          ./vendor/bin/phpunit
