@@ -2,7 +2,7 @@
 
 namespace App\Tests\Feature;
 
-use App\Enum\ExcelServerFields;
+use App\Enum\ServerFields;
 use App\Repository\ExcelServerRepository;
 use App\Service\ExcelFilterMatcher;
 use App\Utils\RamParser;
@@ -30,45 +30,45 @@ class ServerFilteringTest extends TestCase
     public function testCanFilterByLocation()
     {
         $servers = $this->repository->setFilters([
-            ExcelServerFields::LOCATION => 'Amsterdam',
+            ServerFields::LOCATION => 'Amsterdam',
         ])->getServers();
 
         foreach ($servers as $server) {
-            $this->assertStringContainsString('Amsterdam', $server[ExcelServerFields::LOCATION]);
+            $this->assertStringContainsString('Amsterdam', $server[ServerFields::LOCATION]);
         }
     }
 
     public function testCanFilterByRamCapacity()
     {
         $servers = $this->repository->setFilters([
-            ExcelServerFields::RAM_CAPACITY => '16',
+            ServerFields::RAM_CAPACITY => '16',
         ])->getServers();
 
         foreach ($servers as $server) {
-            $this->assertEquals(16, $server[ExcelServerFields::RAM_CAPACITY]);
+            $this->assertEquals(16, $server[ServerFields::RAM_CAPACITY]);
         }
     }
 
     public function testCanFilterByHddCapacity()
     {
         $servers = $this->repository->setFilters([
-            ExcelServerFields::HDD_CAPACITY => '1024-2048',
+            ServerFields::HDD_CAPACITY => '1024-2048',
         ])->getServers();
 
         foreach ($servers as $server) {
-            $this->assertGreaterThanOrEqual(1024, $server[ExcelServerFields::HDD_CAPACITY]);
-            $this->assertLessThanOrEqual(2048, $server[ExcelServerFields::HDD_CAPACITY]);
+            $this->assertGreaterThanOrEqual(1024, $server[ServerFields::HDD_CAPACITY]);
+            $this->assertLessThanOrEqual(2048, $server[ServerFields::HDD_CAPACITY]);
         }
     }
 
     public function testCanFilterByHddType()
     {
         $servers = $this->repository->setFilters([
-            ExcelServerFields::HDD_TYPE => 'SATA',
+            ServerFields::HDD_TYPE => 'SATA',
         ])->getServers();
 
         foreach ($servers as $server) {
-            $this->assertStringContainsString('SATA', $server[ExcelServerFields::HDD_TYPE]);
+            $this->assertStringContainsString('SATA', $server[ServerFields::HDD_TYPE]);
         }
     }
 }

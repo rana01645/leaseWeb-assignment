@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Enum\ExcelServerFields;
+use App\Enum\ServerFields;
 use App\Service\ExcelFilterMatcher;
 use App\Utils\RamParser;
 use App\Utils\StorageParser;
@@ -49,8 +49,8 @@ class ExcelServerRepository implements ServerRepositoryInterface
     private function checkValidFilters(array $filters): void
     {
         foreach ($filters as $field => $value) {
-            if (!in_array($field, ExcelServerFields::getSupportedFilters(), true)) {
-                throw new \InvalidArgumentException('Invalid filter '.$field.' provided, supported filters are: '.implode(', ', ExcelServerFields::getSupportedFilters()));
+            if (!in_array($field, ServerFields::getSupportedFilters(), true)) {
+                throw new \InvalidArgumentException('Invalid filter '.$field.' provided, supported filters are: '.implode(', ', ServerFields::getSupportedFilters()));
             }
         }
     }
@@ -65,16 +65,16 @@ class ExcelServerRepository implements ServerRepositoryInterface
         $servers = [];
         foreach ($data as $row) {
             $server = [
-                ExcelServerFields::MODEL => $row['A'],
-                ExcelServerFields::RAM => $row['B'],
-                ExcelServerFields::HDD => $row['C'],
-                ExcelServerFields::LOCATION => $row['D'],
-                ExcelServerFields::PRICE => $row['E'],
+                ServerFields::MODEL => $row['A'],
+                ServerFields::RAM => $row['B'],
+                ServerFields::HDD => $row['C'],
+                ServerFields::LOCATION => $row['D'],
+                ServerFields::PRICE => $row['E'],
 
-                ExcelServerFields::HDD_TYPE => $this->storageParser->parseType($row['C']),
-                ExcelServerFields::HDD_CAPACITY => $this->storageParser->parseCapacity($row['C']),
-                ExcelServerFields::RAM_TYPE => $this->ramParser->parseType($row['B']),
-                ExcelServerFields::RAM_CAPACITY => $this->ramParser->parseCapacity($row['B']),
+                ServerFields::HDD_TYPE => $this->storageParser->parseType($row['C']),
+                ServerFields::HDD_CAPACITY => $this->storageParser->parseCapacity($row['C']),
+                ServerFields::RAM_TYPE => $this->ramParser->parseType($row['B']),
+                ServerFields::RAM_CAPACITY => $this->ramParser->parseCapacity($row['B']),
             ];
             if ($this->excelFilterMatcher->matchesFilters($server, $this->filters)) {
                 $servers[] = $server;
@@ -141,7 +141,7 @@ class ExcelServerRepository implements ServerRepositoryInterface
 
     public function orderBy(string $field, string $direction = 'asc'): ServerRepositoryInterface
     {
-        if (!in_array($field, ExcelServerFields::getSupportedOrderByFields())) {
+        if (!in_array($field, ServerFields::getSupportedOrderByFields())) {
             throw new \InvalidArgumentException('Invalid orderBy field: '.$field);
         }
         if (!in_array($direction, ['asc', 'desc'])) {

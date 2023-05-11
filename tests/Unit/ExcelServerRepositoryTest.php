@@ -2,7 +2,7 @@
 
 namespace App\Tests\Unit;
 
-use App\Enum\ExcelServerFields;
+use App\Enum\ServerFields;
 use App\Repository\ExcelServerRepository;
 use App\Service\ExcelFilterMatcher;
 use App\Utils\RamParser;
@@ -61,10 +61,10 @@ class ExcelServerRepositoryTest extends TestCase
     public function testGetServersWithValidFiltersReturnsCorrectData(): void
     {
         $filters = [
-            ExcelServerFields::LOCATION => 'Amsterdam',
-            ExcelServerFields::HDD_TYPE => 'SSD',
-            ExcelServerFields::RAM_CAPACITY => ['16', '32'],
-            ExcelServerFields::HDD_CAPACITY => '0-1024',
+            ServerFields::LOCATION => 'Amsterdam',
+            ServerFields::HDD_TYPE => 'SSD',
+            ServerFields::RAM_CAPACITY => ['16', '32'],
+            ServerFields::HDD_CAPACITY => '0-1024',
         ];
 
         $this->repository->setFilters($filters);
@@ -80,12 +80,12 @@ class ExcelServerRepositoryTest extends TestCase
     public function testGetServersWithValidOrderByReturnsCorrectData(): void
     {
         $filters = [
-            ExcelServerFields::LOCATION => 'Amsterdam',
-            ExcelServerFields::HDD_TYPE => 'SSD',
-            ExcelServerFields::RAM_CAPACITY => ['16', '32'],
-            ExcelServerFields::HDD_CAPACITY => '0-1024',
+            ServerFields::LOCATION => 'Amsterdam',
+            ServerFields::HDD_TYPE => 'SSD',
+            ServerFields::RAM_CAPACITY => ['16', '32'],
+            ServerFields::HDD_CAPACITY => '0-1024',
         ];
-        $this->repository->orderBy(ExcelServerFields::LOCATION, 'desc')->setFilters($filters);
+        $this->repository->orderBy(ServerFields::LOCATION, 'desc')->setFilters($filters);
 
         $servers = $this->repository->getServers();
         $expected = json_decode(file_get_contents(__DIR__.'/../data/expected_ordered_servers.json'), true, 512,

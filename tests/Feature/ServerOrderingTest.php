@@ -2,7 +2,7 @@
 
 namespace App\Tests\Feature;
 
-use App\Enum\ExcelServerFields;
+use App\Enum\ServerFields;
 use App\Repository\ExcelServerRepository;
 use App\Service\ExcelFilterMatcher;
 use App\Utils\RamParser;
@@ -27,62 +27,62 @@ class ServerOrderingTest extends TestCase
 
     public function testOrderByLocationAscending(): void
     {
-        $servers = $this->repository->orderBy(ExcelServerFields::LOCATION)->getServers();
+        $servers = $this->repository->orderBy(ServerFields::LOCATION)->getServers();
 
         $this->assertNotEmpty($servers);
         $this->assertIsArray($servers);
-        $this->assertStringContainsString('Amsterdam', $servers[0][ExcelServerFields::LOCATION]);
+        $this->assertStringContainsString('Amsterdam', $servers[0][ServerFields::LOCATION]);
     }
 
     public function testOrderByLocationDescending(): void
     {
-        $servers = $this->repository->orderBy(ExcelServerFields::LOCATION, 'desc')->getServers();
+        $servers = $this->repository->orderBy(ServerFields::LOCATION, 'desc')->getServers();
 
         $this->assertNotEmpty($servers);
         $this->assertIsArray($servers);
-        $this->assertStringContainsString('Washington', $servers[0][ExcelServerFields::LOCATION]);
+        $this->assertStringContainsString('Washington', $servers[0][ServerFields::LOCATION]);
     }
 
     public function testOrderByRamCapacityAscending(): void
     {
-        $servers = $this->repository->orderBy(ExcelServerFields::RAM_CAPACITY)->getServers();
+        $servers = $this->repository->orderBy(ServerFields::RAM_CAPACITY)->getServers();
 
         $this->assertNotEmpty($servers);
         $this->assertIsArray($servers);
-        $this->assertEquals(4, $servers[0][ExcelServerFields::RAM_CAPACITY]);
+        $this->assertEquals(4, $servers[0][ServerFields::RAM_CAPACITY]);
     }
 
     public function testOrderByRamCapacityDescending(): void
     {
-        $servers = $this->repository->orderBy(ExcelServerFields::RAM_CAPACITY, 'desc')->getServers();
+        $servers = $this->repository->orderBy(ServerFields::RAM_CAPACITY, 'desc')->getServers();
 
         $this->assertNotEmpty($servers);
         $this->assertIsArray($servers);
-        $this->assertEquals(128, $servers[0][ExcelServerFields::RAM_CAPACITY]);
+        $this->assertEquals(128, $servers[0][ServerFields::RAM_CAPACITY]);
     }
 
     public function testOrderByHddCapacityAscending(): void
     {
-        $servers = $this->repository->orderBy(ExcelServerFields::HDD_CAPACITY)->getServers();
+        $servers = $this->repository->orderBy(ServerFields::HDD_CAPACITY)->getServers();
 
         $this->assertNotEmpty($servers);
         $this->assertIsArray($servers);
-        $this->assertEquals(120, $servers[0][ExcelServerFields::HDD_CAPACITY]);
+        $this->assertEquals(120, $servers[0][ServerFields::HDD_CAPACITY]);
     }
 
     public function testOrderByHddCapacityDescending(): void
     {
-        $servers = $this->repository->orderBy(ExcelServerFields::HDD_CAPACITY, 'desc')->getServers();
+        $servers = $this->repository->orderBy(ServerFields::HDD_CAPACITY, 'desc')->getServers();
 
         $this->assertNotEmpty($servers);
         $this->assertIsArray($servers);
-        $this->assertEquals(24576, $servers[0][ExcelServerFields::HDD_CAPACITY]);
+        $this->assertEquals(24576, $servers[0][ServerFields::HDD_CAPACITY]);
     }
 
     public function testOrderByValidationForInvalidValue(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->repository->orderBy(ExcelServerFields::HDD_TYPE)->getServers();
+        $this->repository->orderBy(ServerFields::HDD_TYPE)->getServers();
 
     }
 

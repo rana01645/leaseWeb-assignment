@@ -2,7 +2,7 @@
 
 namespace App\Tests\Service;
 
-use App\Enum\ExcelServerFields;
+use App\Enum\ServerFields;
 use App\Service\ExcelFilterMatcher;
 use PHPUnit\Framework\TestCase;
 
@@ -18,15 +18,15 @@ class ExcelFilterMatcherTest extends TestCase
     public function testMatchesFilterWithStringFilterReturnsTrue()
     {
         $server = [
-            ExcelServerFields::LOCATION => 'Amsterdam',
-            ExcelServerFields::HDD_TYPE => 'SSD',
-            ExcelServerFields::RAM_CAPACITY => '16',
-            ExcelServerFields::HDD_CAPACITY => '500',
+            ServerFields::LOCATION => 'Amsterdam',
+            ServerFields::HDD_TYPE => 'SSD',
+            ServerFields::RAM_CAPACITY => '16',
+            ServerFields::HDD_CAPACITY => '500',
         ];
 
         $filter = 'Amsterdam';
 
-        $result = $this->matcher->matchesFilter($server[ExcelServerFields::LOCATION], $filter);
+        $result = $this->matcher->matchesFilter($server[ServerFields::LOCATION], $filter);
 
         $this->assertTrue($result);
     }
@@ -34,15 +34,15 @@ class ExcelFilterMatcherTest extends TestCase
     public function testMatchesFilterWithArrayFilterReturnsTrue()
     {
         $server = [
-            ExcelServerFields::LOCATION => 'Amsterdam',
-            ExcelServerFields::HDD_TYPE => 'SSD',
-            ExcelServerFields::RAM_CAPACITY => '16',
-            ExcelServerFields::HDD_CAPACITY => '500',
+            ServerFields::LOCATION => 'Amsterdam',
+            ServerFields::HDD_TYPE => 'SSD',
+            ServerFields::RAM_CAPACITY => '16',
+            ServerFields::HDD_CAPACITY => '500',
         ];
 
         $filter = ['Amsterdam', 'Rotterdam'];
 
-        $result = $this->matcher->matchesFilter($server[ExcelServerFields::LOCATION], $filter);
+        $result = $this->matcher->matchesFilter($server[ServerFields::LOCATION], $filter);
 
         $this->assertTrue($result);
     }
@@ -50,15 +50,15 @@ class ExcelFilterMatcherTest extends TestCase
     public function testMatchesFilterWithRangeFilterReturnsTrue()
     {
         $server = [
-            ExcelServerFields::LOCATION => 'Amsterdam',
-            ExcelServerFields::HDD_TYPE => 'SSD',
-            ExcelServerFields::RAM_CAPACITY => '16',
-            ExcelServerFields::HDD_CAPACITY => '500',
+            ServerFields::LOCATION => 'Amsterdam',
+            ServerFields::HDD_TYPE => 'SSD',
+            ServerFields::RAM_CAPACITY => '16',
+            ServerFields::HDD_CAPACITY => '500',
         ];
 
         $filter = '400-600';
 
-        $result = $this->matcher->matchesFilter($server[ExcelServerFields::HDD_CAPACITY], $filter);
+        $result = $this->matcher->matchesFilter($server[ServerFields::HDD_CAPACITY], $filter);
 
         $this->assertTrue($result);
     }
@@ -66,15 +66,15 @@ class ExcelFilterMatcherTest extends TestCase
     public function testMatchesFilterWithMultipleRangeFilterReturnsTrue()
     {
         $server = [
-            ExcelServerFields::LOCATION => 'Amsterdam',
-            ExcelServerFields::HDD_TYPE => 'SSD',
-            ExcelServerFields::RAM_CAPACITY => '16',
-            ExcelServerFields::HDD_CAPACITY => '500',
+            ServerFields::LOCATION => 'Amsterdam',
+            ServerFields::HDD_TYPE => 'SSD',
+            ServerFields::RAM_CAPACITY => '16',
+            ServerFields::HDD_CAPACITY => '500',
         ];
 
         $filter = ['100-300', '400-600'];
 
-        $result = $this->matcher->matchesFilter($server[ExcelServerFields::HDD_CAPACITY], $filter);
+        $result = $this->matcher->matchesFilter($server[ServerFields::HDD_CAPACITY], $filter);
 
         $this->assertTrue($result);
     }
@@ -82,15 +82,15 @@ class ExcelFilterMatcherTest extends TestCase
     public function testMatchesFilterWithCommaSeparatedFilterReturnsTrue()
     {
         $server = [
-            ExcelServerFields::LOCATION => 'Amsterdam',
-            ExcelServerFields::HDD_TYPE => 'SSD',
-            ExcelServerFields::RAM_CAPACITY => '16',
-            ExcelServerFields::HDD_CAPACITY => '500',
+            ServerFields::LOCATION => 'Amsterdam',
+            ServerFields::HDD_TYPE => 'SSD',
+            ServerFields::RAM_CAPACITY => '16',
+            ServerFields::HDD_CAPACITY => '500',
         ];
 
         $filter = 'SSD,SATA';
 
-        $result = $this->matcher->matchesFilter($server[ExcelServerFields::HDD_TYPE], $filter);
+        $result = $this->matcher->matchesFilter($server[ServerFields::HDD_TYPE], $filter);
 
         $this->assertTrue($result);
     }
@@ -98,15 +98,15 @@ class ExcelFilterMatcherTest extends TestCase
     public function testMatchesFilterWithStringFilterReturnsFalse()
     {
         $server = [
-            ExcelServerFields::LOCATION => 'Amsterdam',
-            ExcelServerFields::HDD_TYPE => 'SSD',
-            ExcelServerFields::RAM_CAPACITY => '16',
-            ExcelServerFields::HDD_CAPACITY => '500',
+            ServerFields::LOCATION => 'Amsterdam',
+            ServerFields::HDD_TYPE => 'SSD',
+            ServerFields::RAM_CAPACITY => '16',
+            ServerFields::HDD_CAPACITY => '500',
         ];
 
         $filter = 'Rotterdam';
 
-        $result = $this->matcher->matchesFilter($server[ExcelServerFields::LOCATION], $filter);
+        $result = $this->matcher->matchesFilter($server[ServerFields::LOCATION], $filter);
 
         $this->assertFalse($result);
     }
@@ -114,14 +114,14 @@ class ExcelFilterMatcherTest extends TestCase
     public function testMatchesFilterWithArrayFilterReturnsFalse()
     {
         $server = [
-            ExcelServerFields::LOCATION => 'Amsterdam',
-            ExcelServerFields::HDD_TYPE => 'SSD',
-            ExcelServerFields::RAM_CAPACITY => '16',
-            ExcelServerFields::HDD_CAPACITY => '500',
+            ServerFields::LOCATION => 'Amsterdam',
+            ServerFields::HDD_TYPE => 'SSD',
+            ServerFields::RAM_CAPACITY => '16',
+            ServerFields::HDD_CAPACITY => '500',
         ];
         $filter = ['Rotterdam', 'Utrecht'];
 
-        $result = $this->matcher->matchesFilter($server[ExcelServerFields::LOCATION], $filter);
+        $result = $this->matcher->matchesFilter($server[ServerFields::LOCATION], $filter);
 
         $this->assertFalse($result);
     }
@@ -129,15 +129,15 @@ class ExcelFilterMatcherTest extends TestCase
     public function testMatchesFilterWithRangeFilterReturnsFalse()
     {
         $server = [
-            ExcelServerFields::LOCATION => 'Amsterdam',
-            ExcelServerFields::HDD_TYPE => 'SSD',
-            ExcelServerFields::RAM_CAPACITY => '16',
-            ExcelServerFields::HDD_CAPACITY => '500',
+            ServerFields::LOCATION => 'Amsterdam',
+            ServerFields::HDD_TYPE => 'SSD',
+            ServerFields::RAM_CAPACITY => '16',
+            ServerFields::HDD_CAPACITY => '500',
         ];
 
         $filter = '600-800';
 
-        $result = $this->matcher->matchesFilter($server[ExcelServerFields::HDD_CAPACITY], $filter);
+        $result = $this->matcher->matchesFilter($server[ServerFields::HDD_CAPACITY], $filter);
 
         $this->assertFalse($result);
     }
@@ -145,15 +145,15 @@ class ExcelFilterMatcherTest extends TestCase
     public function testMatchesFilterWithMultipleRangeFilterReturnsFalse()
     {
         $server = [
-            ExcelServerFields::LOCATION => 'Amsterdam',
-            ExcelServerFields::HDD_TYPE => 'SSD',
-            ExcelServerFields::RAM_CAPACITY => '16',
-            ExcelServerFields::HDD_CAPACITY => '500',
+            ServerFields::LOCATION => 'Amsterdam',
+            ServerFields::HDD_TYPE => 'SSD',
+            ServerFields::RAM_CAPACITY => '16',
+            ServerFields::HDD_CAPACITY => '500',
         ];
 
         $filter = ['0-100', '600-800'];
 
-        $result = $this->matcher->matchesFilter($server[ExcelServerFields::HDD_CAPACITY], $filter);
+        $result = $this->matcher->matchesFilter($server[ServerFields::HDD_CAPACITY], $filter);
 
         $this->assertFalse($result);
     }
@@ -161,15 +161,15 @@ class ExcelFilterMatcherTest extends TestCase
     public function testMatchesFilterWithCommaSeparatedFilterReturnsFalse()
     {
         $server = [
-            ExcelServerFields::LOCATION => 'Amsterdam',
-            ExcelServerFields::HDD_TYPE => 'SSD',
-            ExcelServerFields::RAM_CAPACITY => '16',
-            ExcelServerFields::HDD_CAPACITY => '500',
+            ServerFields::LOCATION => 'Amsterdam',
+            ServerFields::HDD_TYPE => 'SSD',
+            ServerFields::RAM_CAPACITY => '16',
+            ServerFields::HDD_CAPACITY => '500',
         ];
 
         $filter = 'SATA,SAS';
 
-        $result = $this->matcher->matchesFilter($server[ExcelServerFields::HDD_TYPE], $filter);
+        $result = $this->matcher->matchesFilter($server[ServerFields::HDD_TYPE], $filter);
 
         $this->assertFalse($result);
     }
