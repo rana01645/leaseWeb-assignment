@@ -134,7 +134,8 @@ class CachedExcelServerRepository implements ServerRepositoryInterface
 
     public function setFilters(array $filters): ServerRepositoryInterface
     {
-        return $this->repository->setFilters($filters);
+        $this->repository->setFilters($filters);
+        return $this;
     }
 
     public function getServers(): array
@@ -154,7 +155,8 @@ class CachedExcelServerRepository implements ServerRepositoryInterface
 
     public function orderBy(string $field, string $direction = 'asc'): ServerRepositoryInterface
     {
-        return $this->repository->orderBy($field, $direction);
+       $this->repository->orderBy($field, $direction);
+       return $this;
     }
 
     public function hasFilters(): bool
