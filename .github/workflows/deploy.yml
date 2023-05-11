@@ -16,7 +16,7 @@ jobs:
                     key: ${{ secrets.SSH_PRIVATE_KEY }}
                     script: |
                         cd /var/www/html/leaseweb
-                        git reset --hard
-                        git clean -df
-                        git fetch origin
-                        git checkout origin/main
+                        GIT_SSH_COMMAND='ssh -i ~/.ssh/leaseweb -o IdentitiesOnly=yes' git reset --hard
+                        GIT_SSH_COMMAND='ssh -i ~/.ssh/leaseweb -o IdentitiesOnly=yes' git clean -df
+                        GIT_SSH_COMMAND='ssh -i ~/.ssh/leaseweb -o IdentitiesOnly=yes' git fetch origin
+                        GIT_SSH_COMMAND='ssh -i ~/.ssh/leaseweb -o IdentitiesOnly=yes' git checkout origin/main
