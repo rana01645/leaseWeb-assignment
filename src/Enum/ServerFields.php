@@ -2,7 +2,7 @@
 
 namespace App\Enum;
 
-class ExcelServerFields
+class ServerFields
 {
     const MODEL = 'model';
     const RAM = 'ram';
