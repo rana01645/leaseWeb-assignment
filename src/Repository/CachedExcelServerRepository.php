@@ -123,7 +123,7 @@ class CachedExcelServerRepository implements ServerRepositoryInterface
         if ($cachedData->isHit() && !$this->isModified()) {
             return $cachedData->get();
         }
-        $orderedServers = $this->repository->getOrderedServers($orderByField, $orderByDirection);
+        $orderedServers = $this->repository->getServers($orderByField, $orderByDirection);
 
         $cachedData->set($orderedServers);
         $this->cache->save($cachedData);

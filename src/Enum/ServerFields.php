@@ -36,5 +36,13 @@ class ServerFields
             self::PRICE,
         ];
     }
+
+    public static function getSupportedOrderByDirections()
+    {
+        return [
+            'asc',
+            'desc',
+        ];
+    }
 }
 
