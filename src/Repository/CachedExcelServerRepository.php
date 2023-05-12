@@ -115,23 +115,6 @@ class CachedExcelServerRepository implements ServerRepositoryInterface
         return $ramOptions;
     }
 
-    public function getCachedOrderedServers(string $orderByField = '', string $orderByDirection = 'asc'): array
-    {
-        $cacheKey = 'ordered_servers_'.$orderByField.'_'.$orderByDirection;
-
-        $cachedData = $this->cache->getItem($cacheKey);
-        if ($cachedData->isHit() && !$this->isModified()) {
-            return $cachedData->get();
-        }
-        $orderedServers = $this->repository->getOrderedServers($orderByField, $orderByDirection);
-
-        $cachedData->set($orderedServers);
-        $this->cache->save($cachedData);
-        $this->updateLastModified();
-
-        return $orderedServers;
-    }
-
     public function setFilters(array $filters): ServerRepositoryInterface
     {
         $this->repository->setFilters($filters);
