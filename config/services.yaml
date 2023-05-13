@@ -24,7 +24,6 @@ services:
         class: App\Repository\ExcelServerRepository
         arguments:
             - '%kernel.project_dir%/var/data/servers_filters_assignment.xlsx'
-            - '@App\Service\ExcelFilterMatcher'
             - '@App\Utils\StorageParser'
             - '@App\Utils\RamParser'
             -

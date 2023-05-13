@@ -4,7 +4,6 @@ namespace App\Tests\Unit;
 
 use App\Enum\ServerFields;
 use App\Repository\ExcelServerRepository;
-use App\Service\ExcelFilterMatcher;
 use App\Utils\RamParser;
 use App\Utils\StorageParser;
 use PHPUnit\Framework\TestCase;
@@ -20,7 +19,6 @@ class ExcelServerRepositoryTest extends TestCase
 
         $this->repository = new ExcelServerRepository(
             $filePath,
-            new ExcelFilterMatcher(),
             new StorageParser(),
             new RamParser()
         );
@@ -31,67 +29,6 @@ class ExcelServerRepositoryTest extends TestCase
         $servers = $this->repository->getServers();
 
         $this->assertIsArray($servers);
-    }
-
-    public function testSetFiltersWithInvalidFiltersThrowsException(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        $filters = [
-            'invalid_filter' => 'value',
-        ];
-
-        $this->repository->setFilters($filters);
-    }
-
-    public function testOrderByWithInvalidFieldThrowsException(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        $this->repository->orderBy('invalid_field');
-    }
-
-    public function testOrderByWithInvalidDirectionThrowsException(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        $this->repository->orderBy('price', 'invalid_direction');
-    }
-
-    public function testGetServersWithValidFiltersReturnsCorrectData(): void
-    {
-        $filters = [
-            ServerFields::LOCATION => 'Amsterdam',
-            ServerFields::HDD_TYPE => 'SSD',
-            ServerFields::RAM_CAPACITY => ['16', '32'],
-            ServerFields::HDD_CAPACITY => '0-1024',
-        ];
-
-        $this->repository->setFilters($filters);
-
-        $servers = $this->repository->getServers();
-
-        $expected = json_decode(file_get_contents(__DIR__.'/../data/expected_servers.json'), true, 512,
-            JSON_THROW_ON_ERROR);
-
-        $this->assertEquals($expected, $servers);
-    }
-
-    public function testGetServersWithValidOrderByReturnsCorrectData(): void
-    {
-        $filters = [
-            ServerFields::LOCATION => 'Amsterdam',
-            ServerFields::HDD_TYPE => 'SSD',
-            ServerFields::RAM_CAPACITY => ['16', '32'],
-            ServerFields::HDD_CAPACITY => '0-1024',
-        ];
-        $this->repository->orderBy(ServerFields::LOCATION, 'desc')->setFilters($filters);
-
-        $servers = $this->repository->getServers();
-        $expected = json_decode(file_get_contents(__DIR__.'/../data/expected_ordered_servers.json'), true, 512,
-            JSON_THROW_ON_ERROR);
-
-        $this->assertEquals($expected, $servers);
     }
 
 

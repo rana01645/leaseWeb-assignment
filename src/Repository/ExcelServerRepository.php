@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Enum\ServerFields;
-use App\Service\ExcelFilterMatcher;
 use App\Utils\RamParser;
 use App\Utils\StorageParser;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -17,14 +16,9 @@ class ExcelServerRepository implements ServerRepositoryInterface
 
     private RamParser $ramParser;
 
-    private ExcelFilterMatcher $excelFilterMatcher;
-    private array $filters = [];
-    private ?string $orderByField = null;
-    private ?string $orderByDirection = null;
 
     public function __construct(
         string $excelFilePath,
-        ExcelFilterMatcher $excelFilterMatcher,
         StorageParser $storageParser,
         RamParser $ramParser
     ) {
@@ -33,27 +27,10 @@ class ExcelServerRepository implements ServerRepositoryInterface
         } catch (\Exception $e) {
             throw new \RuntimeException('Error loading Excel file: '.$e->getMessage());
         }
-        $this->excelFilterMatcher = $excelFilterMatcher;
         $this->storageParser = $storageParser;
         $this->ramParser = $ramParser;
     }
 
-
-    public function setFilters(array $filters): ServerRepositoryInterface
-    {
-        $this->checkValidFilters($filters);
-        $this->filters = $filters;
-        return $this;
-    }
-
-    private function checkValidFilters(array $filters): void
-    {
-        foreach ($filters as $field => $value) {
-            if (!in_array($field, ServerFields::getSupportedFilters(), true)) {
-                throw new \InvalidArgumentException('Invalid filter '.$field.' provided, supported filters are: '.implode(', ', ServerFields::getSupportedFilters()));
-            }
-        }
-    }
 
     public function getServers(): array
     {
@@ -76,29 +53,10 @@ class ExcelServerRepository implements ServerRepositoryInterface
                 ServerFields::RAM_TYPE => $this->ramParser->parseType($row['B']),
                 ServerFields::RAM_CAPACITY => $this->ramParser->parseCapacity($row['B']),
             ];
-            if ($this->excelFilterMatcher->matchesFilters($server, $this->filters)) {
-                $servers[] = $server;
-            }
+
+            $servers[] = $server;
         }
 
-        // sort the data based on the selected column and direction
-        if ($this->orderByField) {
-            usort($servers, function ($a, $b) {
-                $result = $a[$this->orderByField] <=> $b[$this->orderByField];
-                if ($this->orderByDirection === 'desc') {
-                    $result *= -1;
-                }
-                return $result;
-            });
-        }
-        // usort($servers, function ($a, $b) {
-        //     $aValue = $a[$this->orderByColumn];
-        //     $bValue = $b[$this->orderByColumn];
-        //     if ($this->orderByDirection === 'desc') {
-        //         return $bValue <=> $aValue;
-        //     }
-        //     return $aValue <=> $bValue;
-        // });
 
         return $servers;
     }
@@ -135,30 +93,5 @@ class ExcelServerRepository implements ServerRepositoryInterface
         sort($ramFilters);
 
         return array_values(array_unique($ramFilters));
-    }
-
-
-
-    public function orderBy(string $field, string $direction = 'asc'): ServerRepositoryInterface
-    {
-        if (!in_array($field, ServerFields::getSupportedOrderByFields())) {
-            throw new \InvalidArgumentException('Invalid orderBy field: '.$field);
-        }
-        if (!in_array($direction, ['asc', 'desc'])) {
-            throw new \InvalidArgumentException('Invalid orderBy direction: ' . $direction);
-        }
-        $this->orderByField = $field;
-        $this->orderByDirection = $direction;
-        return $this;
-    }
-
-    public function hasFilters() :bool
-    {
-        return !empty($this->filters);
-    }
-
-    public function getFilters(): array
-    {
-        return $this->filters;
     }
 }
