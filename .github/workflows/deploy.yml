@@ -25,15 +25,4 @@ jobs:
             GIT_SSH_COMMAND='ssh -i ~/.ssh/leaseweb -o IdentitiesOnly=yes' git clean -df
             GIT_SSH_COMMAND='ssh -i ~/.ssh/leaseweb -o IdentitiesOnly=yes' git fetch origin
             GIT_SSH_COMMAND='ssh -i ~/.ssh/leaseweb -o IdentitiesOnly=yes' git checkout origin/main
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-
-      - name: Install dependencies
-        run: composer install
-
-      - name: Run tests
-        run: |
-          ./vendor/bin/phpunit
+            php bin/phpunit
