@@ -53,17 +53,9 @@ class CachedExcelServerRepository implements ServerRepositoryInterface
         $this->setLastModified($lastModified);
     }
 
-    public function getCachedFilteredKey(): string
-    {
-        return 'filtered_servers_'.md5(serialize($this->getFilters()));
-    }
-
     public function getCachedServers(): array
     {
         $cacheKey = 'servers';
-        if ($this->hasFilters()) {
-            $cacheKey = $this->getCachedFilteredKey();
-        }
 
         $cachedData = $this->cache->getItem($cacheKey);
         if ($cachedData->isHit() && !$this->isModified()) {
@@ -115,28 +107,6 @@ class CachedExcelServerRepository implements ServerRepositoryInterface
         return $ramOptions;
     }
 
-    public function getCachedOrderedServers(string $orderByField = '', string $orderByDirection = 'asc'): array
-    {
-        $cacheKey = 'ordered_servers_'.$orderByField.'_'.$orderByDirection;
-
-        $cachedData = $this->cache->getItem($cacheKey);
-        if ($cachedData->isHit() && !$this->isModified()) {
-            return $cachedData->get();
-        }
-        $orderedServers = $this->repository->getOrderedServers($orderByField, $orderByDirection);
-
-        $cachedData->set($orderedServers);
-        $this->cache->save($cachedData);
-        $this->updateLastModified();
-
-        return $orderedServers;
-    }
-
-    public function setFilters(array $filters): ServerRepositoryInterface
-    {
-        $this->repository->setFilters($filters);
-        return $this;
-    }
 
     public function getServers(): array
     {
@@ -151,22 +121,6 @@ class CachedExcelServerRepository implements ServerRepositoryInterface
     public function getRamOptions(): array
     {
         return $this->getCachedRamOptions();
-    }
-
-    public function orderBy(string $field, string $direction = 'asc'): ServerRepositoryInterface
-    {
-       $this->repository->orderBy($field, $direction);
-       return $this;
-    }
-
-    public function hasFilters(): bool
-    {
-        return $this->repository->hasFilters();
-    }
-
-    public function getFilters(): array
-    {
-        return $this->repository->getFilters();
     }
 }
 
